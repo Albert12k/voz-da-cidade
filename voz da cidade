@@ -1,0 +1,866 @@
+import 'package:flutter/material.dart'; //
+// Aqui estamos dizendo ao nosso programa que queremos usar a biblioteca do Flutter, que nos ajuda a criar aplicativos bonitos e interativos.
+
+
+void main() { //Esta é a primeira coisa que o programa faz quando é iniciado.
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget { //Aqui estamos criando uma nova classe chamada MyApp. Essa classe é como o "coração" do nosso aplicativo.
+  @override
+  Widget build(BuildContext context) { //Este é um widget que nos dá uma estrutura básica para o aplicativo, como um título e um tema (cores).
+    return MaterialApp(
+      title: 'Voz da Cidade',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginPage(), // Inicia na tela de login
+    );
+  }
+}
+
+// Tela de Login
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Senha',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Lógica de autenticação aqui
+                // Após autenticação, navegue para a tela principal
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppPrincipalPage()),
+                );
+              },
+              child: Text('ENTRAR'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF004675),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CadastroPage()),
+                );
+              },
+              child: Text('Cadastrar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EsqueciSenhaPage()),
+                );
+              },
+              child: Text('Esqueci a Senha'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tela de Cadastro
+class CadastroPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cadastrar'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Nome',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Senha',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Lógica para cadastrar o usuário
+                Navigator.pop(context); // Volta para a tela de login após cadastro
+              },
+              child: Text('CADASTRAR'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF004675),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tela de Esqueci a Senha
+class EsqueciSenhaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Esqueci a Senha'),
+        backgroundColor: Color(0xFF004675),
+      ),
+          body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Lógica para enviar email de recuperação de senha
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Email de recuperação enviado!')),
+                );
+                Navigator.pop(context); // Volta para a tela de login após enviar o email
+              },
+              child: Text('ENVIAR'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF004675),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tela Principal
+class AppPrincipalPage extends StatefulWidget {
+  @override
+  _AppPrincipalPageState createState() => _AppPrincipalPageState();
+}
+
+class _AppPrincipalPageState extends State<AppPrincipalPage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _getPage(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.event_note), label: 'Eventos'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_box), label: 'Nova Ocorrência'),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Comunidade'),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Ocorrências'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return HomePage();
+      case 1:
+        return EventosPage();
+      case 2:
+        return NovaOcorrenciaPage(onOcorrenciaEnviar: (ocorrencia) {
+          // Lógica para enviar a nova ocorrência
+        });
+      case 3:
+        return MuralComunidade();
+      case 4:
+        return VisualizarOcorrenciasPage(
+          ocorrencias: [], // Aqui você deve passar a lista de ocorrências
+          onAtualizarStatus: (index, novoStatus) {
+            // Lógica para atualizar o status da ocorrência
+          },
+          onAdicionarComentario: (index, comentario) {
+            // Lógica para adicionar um comentário à ocorrência
+          },
+        );
+      case 5:
+        return PerfilUsuarioPage(
+          nome: 'Nome do Usuário', // Substitua pelo nome do usuário
+          email: 'email@exemplo.com', // Substitua pelo email do usuário
+          onSalvar: (nome, email) {
+            // Lógica para salvar as informações do perfil
+          },
+        );
+      default:
+        return HomePage();
+    }
+  }
+}
+
+// Tela Inicial
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Voz da Cidade'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text('Notícias da Cidade'),
+                subtitle: Text('Fique por dentro das últimas notícias e eventos.'),
+                trailing: Icon(Icons.arrow_forward),
+                onTap: () {
+                  // Navegar para a tela de notícias
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NoticiasPage()),
+                  );
+                },
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text('Eventos'),
+                subtitle: Text('Veja os próximos eventos na cidade.'),
+                trailing: Icon(Icons.arrow_forward),
+                onTap: () {
+                                 // Navegar para a tela de eventos
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EventosPage()),
+                  );
+                },
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text('Dicas de Segurança'),
+                subtitle: Text('Dicas para manter sua segurança e bem-estar.'),
+                trailing: Icon(Icons.arrow_forward),
+                onTap: () {
+                  // Navegar para a tela de dicas de segurança
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DicasSegurancaPage()),
+                  );
+                },
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text('Serviços Públicos'),
+                subtitle: Text('Informações sobre serviços disponíveis na cidade.'),
+                trailing: Icon(Icons.arrow_forward),
+                onTap: () {
+                  // Navegar para a tela de serviços públicos
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ServicosPublicosPage()),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tela de Eventos
+class EventosPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Eventos'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Center(
+        child: Text('Aqui estarão os próximos eventos da cidade.'),
+      ),
+    );
+  }
+}
+
+// Tela de Notícias
+class NoticiasPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notícias da Cidade'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Center(
+        child: Text('Aqui estarão as notícias da cidade.'),
+      ),
+    );
+  }
+}
+
+// Tela de Dicas de Segurança
+class DicasSegurancaPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dicas de Segurança'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Center(
+        child: Text('Aqui estarão as dicas de segurança.'),
+      ),
+    );
+  }
+}
+
+// Tela de Serviços Públicos
+class ServicosPublicosPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Serviços Públicos'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Center(
+        child: Text('Aqui estarão as informações sobre serviços públicos.'),
+      ),
+    );
+  }
+}
+
+// Classe para Nova Ocorrência
+class NovaOcorrenciaPage extends StatefulWidget {
+  final void Function(Ocorrencia) onOcorrenciaEnviar;
+
+  NovaOcorrenciaPage({required this.onOcorrenciaEnviar});
+
+  @override
+  _NovaOcorrenciaPageState createState() => _NovaOcorrenciaPageState();
+}
+
+class _NovaOcorrenciaPageState extends State<NovaOcorrenciaPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController descricaoController = TextEditingController();
+  final TextEditingController localizacaoController = TextEditingController();
+  String categoria = 'Iluminação';
+
+  void enviarOcorrencia(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      Ocorrencia novaOcorrencia = Ocorrencia(
+        categoria: categoria,
+        descricao: descricaoController.text.trim(),
+        localizacao: localizacaoController.text.trim(),
+        status: 'Pendente',
+        comentarios: [],
+      );
+      widget.onOcorrenciaEnviar(novaOcorrencia);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ocorrência enviada com sucesso!')),
+      );
+      descricaoController.clear();
+      localizacaoController.clear();
+      setState(() {
+        categoria = 'Iluminação';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Nova Ocorrência'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              Text('Categoria', style: TextStyle(fontWeight: FontWeight.w500)),
+              SizedBox(height: 8),
+                            DropdownButtonFormField<String>(
+                value: categoria,
+                items: ['Iluminação', 'Limpeza', 'Segurança']
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
+                onChanged: (String? val) {
+                  setState(() {
+                    if (val != null) categoria = val;
+                  });
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                ),
+              ),
+              SizedBox(height: 16),
+              Text('Descrição', style: TextStyle(fontWeight: FontWeight.w500)),
+              SizedBox(height: 8),
+              TextFormField(
+                controller: descricaoController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  hintText: 'Descreva a ocorrência...',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira uma descrição.';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              Text('Localização', style: TextStyle(fontWeight: FontWeight.w500)),
+              SizedBox(height: 8),
+              TextFormField(
+                controller: localizacaoController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  hintText: 'Informe a localização...',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, insira a localização.';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => enviarOcorrencia(context),
+                child: Text('ENVIAR'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF004675),
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Classe para Ocorrência
+class Ocorrencia {
+  final String categoria;
+  final String descricao;
+  final String localizacao;
+  String status;
+  List<String> comentarios;
+
+  Ocorrencia({
+    required this.categoria,
+    required this.descricao,
+    required this.localizacao,
+    required this.status,
+    required this.comentarios,
+  });
+}
+
+// Mural da Comunidade
+class MuralComunidade extends StatefulWidget {
+  @override
+  _MuralComunidadeState createState() => _MuralComunidadeState();
+}
+
+class _MuralComunidadeState extends State<MuralComunidade> {
+  final List<Postagem> _postagens = [];
+  final TextEditingController _controller = TextEditingController();
+
+  void _adicionarPostagem() {
+    final texto = _controller.text.trim();
+    if (texto.isNotEmpty) {
+      setState(() {
+        _postagens.add(Postagem(texto: texto, comentarios: []));
+        _controller.clear();
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mural da Comunidade'),
+        backgroundColor: Color(0xFF004675),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: 'O que você gostaria de compartilhar?',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: _adicionarPostagem,
+              child: Text('Publicar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF004675),
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _postagens.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_postagens[index].texto, style: TextStyle(fontSize: 16)),
+                          SizedBox(height: 8),
+                          Text('Comentários:', style: TextStyle(fontWeight: FontWeight.bold)),
+                          ..._postagens[index].comentarios.map((comentario) => Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Text('- $comentario'),
+                              )),
+                          TextField(
+                            onSubmitted: (comentario) {
+                              setState(() {
+                                _postagens[index].comentarios.add(comentario);
+                              });
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Adicionar comentário...',
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Classe para Postagem
+class Postagem {
+  final String texto;
+  List<String> comentarios;
+
+  Postagem({required this.texto, required this.comentarios});
+}
+
+// Tela de Visualização de Ocorrências
+class VisualizarOcorrenciasPage extends StatelessWidget {
+  final List<Ocorrencia> ocorrencias;
+  final Function(int, String) onAtualizarStatus;
+  final Function(int, String) onAdicionarComentario;
+
+  VisualizarOcorrenciasPage({
+    required this.ocorrencias,
+    required this.onAtualizarStatus,
+    required this.onAdicionarComentario,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Visualizar Ocorrências'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: ocorrencias.isEmpty
+          ? Center(child: Text('Nenhuma ocorrência registrada.'))
+          : ListView.builder(
+              itemCount: ocorrencias.length,
+              itemBuilder: (context, index) {
+                final occ = ocorrencias[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: ExpansionTile(
+                    title: Text(occ.categoria),
+                    subtitle: Text(occ.descricao),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Localização: ${occ.localizacao}'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('Status: ${occ.status}', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('Comentários:', style: TextStyle(fontWeight: FontWeight.w600)),
+                      ),
+                      ...occ.comentarios.map<Widget>((c) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+                            child: Text('- $c'),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _ComentarioInput(
+                          onEnviar: (texto) {
+                            onAdicionarComentario(index, texto);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: _StatusDropdown(
+                          statusAtual: occ.status,
+                          onStatusAlterado: (String novoStatus) {
+                            onAtualizarStatus(index, novoStatus);
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
+                );
+              },
+            ),
+    );
+  }
+}
+
+class _ComentarioInput extends StatefulWidget {
+  final void Function(String) onEnviar;
+  _ComentarioInput({required this.onEnviar});
+
+  @override
+  __ComentarioInputState createState() => __ComentarioInputState();
+}
+
+class __ComentarioInputState extends State<_ComentarioInput> {
+  final TextEditingController _controller = TextEditingController();
+
+  void _enviar() {
+    final texto = _controller.text.trim();
+    if (texto.isNotEmpty) {
+      widget.onEnviar(texto);
+      _controller.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _controller,
+            decoration: InputDecoration(
+              labelText: 'Adicionar comentário',
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+          ),
+        ),
+        IconButton(
+                  icon: Icon(Icons.send, color: Color(0xFF004675)),
+          onPressed: _enviar,
+        ),
+      ],
+    );
+  }
+}
+
+class _StatusDropdown extends StatelessWidget {
+  final String statusAtual;
+  final void Function(String) onStatusAlterado;
+
+  _StatusDropdown({required this.statusAtual, required this.onStatusAlterado});
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      value: statusAtual,
+      items: ['Pendente', 'Em andamento', 'Concluída']
+          .map((status) => DropdownMenuItem(value: status, child: Text(status)))
+          .toList(),
+      onChanged: (String? novoStatus) {
+        if (novoStatus != null) {
+          onStatusAlterado(novoStatus);
+        }
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      ),
+    );
+  }
+}
+
+// Tela de Perfil do Usuário
+class PerfilUsuarioPage extends StatelessWidget {
+  final String nome;
+  final String email;
+  final Function(String, String) onSalvar;
+
+  PerfilUsuarioPage({required this.nome, required this.email, required this.onSalvar});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController _nomeController = TextEditingController(text: nome);
+    final TextEditingController _emailController = TextEditingController(text: email);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perfil do Usuário'),
+        backgroundColor: Color(0xFF004675),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nomeController,
+              decoration: InputDecoration(
+                labelText: 'Nome',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                onSalvar(_nomeController.text.trim(), _emailController.text.trim());
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Perfil atualizado com sucesso!')),
+                );
+              },
+              child: Text('SALVAR'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF004675),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Navegar de volta para a tela de login
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: Text('SAIR'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
